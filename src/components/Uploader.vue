@@ -1,6 +1,5 @@
 <template>
   <div v-if='token'>
-    {{filterValues}}
     <button class='button logout is-link' @click='logout'>Logout</button>
     <div class='uploader'>
       <div class='issuesTitle'>
