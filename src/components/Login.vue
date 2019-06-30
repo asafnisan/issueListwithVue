@@ -96,6 +96,7 @@ export default {
     width: 300px;
     height: 280px;
     margin: auto;
+    margin-top: 20px;
 }
 .userInput {
     margin-bottom: 25px
@@ -116,8 +117,10 @@ export default {
 }
 .error {
     color: salmon;
+    margin-bottom: 20px;
 }
 .validOrEmpty {
     color: white;
+    margin-bottom: 20px;
 }
 </style>

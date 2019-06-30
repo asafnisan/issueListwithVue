@@ -1,5 +1,6 @@
 <template>
   <div v-if='token'>
+    {{filterValues}}
     <button class='button logout is-link' @click='logout'>Logout</button>
     <div class='uploader'>
       <div class='issuesTitle'>
@@ -46,6 +47,7 @@ export default {
       issueList: [],
       error: '',
       token: '',
+      filterValues: [],
     }
   },
   methods: {
@@ -77,6 +79,7 @@ export default {
             .then((data) => {
               this.issueList = data.issue;
               this.error = '';
+              this.filterValues = Object.keys(data.issue[0])
             })
           })
       }.bind(this);

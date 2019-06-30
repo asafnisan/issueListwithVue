@@ -1,5 +1,6 @@
 <template>
 <div>
+    <Filters />
     <table class='table issueList'>
         <thead>
             <th>Confidence</th>
@@ -29,18 +30,24 @@
 
 <script>
 import 'bulma/css/bulma.css'
+import Filters from './Filters.vue'
 
 export default {
     name: 'IssueList',
     props: [
         'issueList'
     ],
+    components: {
+        Filters
+    }
 }
 </script>
 
 <style scoped>
 .issueList {
+    margin-top: 75px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 250px;
 }
 </style>
