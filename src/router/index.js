@@ -15,6 +15,10 @@ const router = new VueRouter({
         {
             path: '/issues',
             component: Uploader
+        },
+        {
+            path: '*',
+            component: Login,
         }
     ]
 })

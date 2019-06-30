@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div v-if='token'>
+    <button class='button logout is-link' @click='logout'>Logout</button>
     <div class='uploader'>
       <div class='issuesTitle'>
         <h1 class='title'>Upload an XML file to see a list of issues</h1>
@@ -8,6 +9,7 @@
         <input 
           type='file' 
           id='fileinput'
+          class='button is-text'
         >
         <input 
           type='button' 
@@ -43,13 +45,14 @@ export default {
     return {
       issueList: [],
       error: '',
+      token: '',
     }
   },
   methods: {
     loadFile() {
       var file = document.getElementById('fileinput').files[0];
       var fr = new FileReader();
-      var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjIxNTk3NTksIm5hbWUiOiJKb2huIFNub3ciLCJyb2xlIjoiYWRtaW4ifQ.isk5iMe_BApQXiPyvu7RkVUDyxEd_IC4UuygIdxEpRk'
+      var token = this.token;
       fr.onload = function (e) { 
           var content = e.target.result;
           fetch(
@@ -82,10 +85,38 @@ export default {
       } catch(err) {
         this.error = 'Please select a valid XML file'
       }
+    },
+    logout() {
+      localStorage.setItem('auth', '');
+      this.token = '';
+      console.log('logged out!');
+      console.log('auth:', localStorage.getItem('auth'));
+      console.log('this.token:', this.token);
+      this.$router.push('login');
+
     }
   },
   components: {
     IssueList,
+  },
+  created() {
+    this.token = localStorage.getItem('auth');
+    var token = this.token;
+    console.log('here is the token:', this.token);
+    fetch(
+      'http://localhost:8086/restricted',
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'text/xml',
+        }
+      }
+    ).then((response) => {
+      if(response.status !== 200) {
+        this.$router.push('login');
+      }
+    })
   }
 }
 </script>
@@ -107,7 +138,8 @@ a {
   color: #42b983;
 }
 .uploader {
-  margin-bottom: 50px
+  margin-bottom: 50px;
+  clear: right;
 }
 .loaderButton {
   margin-left: 30px
@@ -118,5 +150,10 @@ a {
 }
 .issuesTitle {
   margin-bottom: 100px;
+}
+.logout {
+  float: right;
+  margin-top: -40px;
+  margin-right: 20px;
 }
 </style>

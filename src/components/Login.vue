@@ -56,7 +56,6 @@ export default {
             ).then((response) => {
                 if(response.status === 401) {
                     response.json().then((data) => {
-                        console.log('here is the rejection reason:', data);
                         this.rejection = data.message;
                         return
                     })
@@ -66,6 +65,8 @@ export default {
                         // I am fully aware that jwt should not be stored here. 
                         // It should be stored inside the httpCookie
                         localStorage.setItem('auth', data.token);
+                        this.password = '';
+                        this.username = '';
                         this.$router.push('issues');
                     })
                 }
@@ -78,6 +79,8 @@ export default {
                 this.sendCredentials();
             }
         })
+        localStorage.setItem('auth', '');
+
     }
 }
 </script>
