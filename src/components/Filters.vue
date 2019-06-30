@@ -12,7 +12,7 @@ export default {
 
 <style>
 .filters {
-  width: 700px;
+  width: 470px;
   height: 100px;
   margin-left: auto;
   margin-right: auto;
