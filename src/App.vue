@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Uploader from './components/Uploader.vue';
+import 'bulma/css/bulma.css';
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Uploader
   }
 }
 </script>
