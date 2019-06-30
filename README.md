@@ -1,3 +1,5 @@
+![](issues.gif)
+
 # xmluploader
 
 ## Project setup
