@@ -1,6 +1,6 @@
 <template>
 <div class='box filters'>
-    
+    Placeholder box for filters
 </div>
 </template>
 
