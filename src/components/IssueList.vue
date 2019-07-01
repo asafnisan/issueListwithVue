@@ -1,6 +1,6 @@
 <template>
 <div>
-    <Filters />
+    <Filters :filterValues='filterValues'/>
     <table class='table issueList'>
         <thead>
             <th>Confidence</th>
@@ -35,10 +35,16 @@ import Filters from './Filters.vue'
 export default {
     name: 'IssueList',
     props: [
-        'issueList'
+        'issueList',
+        'filterValues',
     ],
     components: {
         Filters
+    },
+    created() {
+        EventBus.$on('selectFilter', (e) => {
+            console.log(e)
+        })
     }
 }
 </script>

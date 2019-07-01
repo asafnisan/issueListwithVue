@@ -28,13 +28,38 @@
     </div>
     <IssueList 
       v-if="issueList.length > 0"
-      :issueList='issueList'/>
+      :issueList='issueList'
+      :filterValues='filterValues'/>
   </div>
 </template>
 
 <script>
 import 'bulma/css/bulma.css';
 import IssueList from './IssueList.vue'
+
+function arrayToUniqueValues(arr) {
+  var uniqueValuesArray = [];
+  arr.forEach((el) => {
+    if(uniqueValuesArray.indexOf(el) === -1) {
+      uniqueValuesArray.push(el);
+    }
+  })
+  return uniqueValuesArray;
+}
+
+function filterMapper(response) {
+  // Again, I am fully aware of the outrageous code duplication I did here. 
+  // If you know the rules, you can break them. Or so I was told.
+  const filterValues = {
+    confidence: [],
+    name: [],
+    severity: [],
+  };
+  filterValues.confidence = arrayToUniqueValues(response.map(issue => issue.confidence));
+  filterValues.name = arrayToUniqueValues(response.map(issue => issue.name));
+  filterValues.severity = arrayToUniqueValues(response.map(issue => issue.severity));
+  return filterValues;
+}
 
 export default {
   name: 'Uploader',
@@ -46,7 +71,11 @@ export default {
       issueList: [],
       error: '',
       token: '',
-      filterValues: [],
+      filterValues: {
+        confidence: [],
+        name: [],
+        severity: [],
+      },
     }
   },
   methods: {
@@ -78,7 +107,7 @@ export default {
             .then((data) => {
               this.issueList = data.issue;
               this.error = '';
-              this.filterValues = Object.keys(data.issue[0])
+              this.filterValues = filterMapper(data.issue);
             })
           })
       }.bind(this);
@@ -91,9 +120,6 @@ export default {
     logout() {
       localStorage.setItem('auth', '');
       this.token = '';
-      console.log('logged out!');
-      console.log('auth:', localStorage.getItem('auth'));
-      console.log('this.token:', this.token);
       this.$router.push('login');
 
     }
@@ -104,7 +130,6 @@ export default {
   created() {
     this.token = localStorage.getItem('auth');
     var token = this.token;
-    console.log('here is the token:', this.token);
     fetch(
       'http://localhost:8086/restricted',
       {
