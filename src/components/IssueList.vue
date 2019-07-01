@@ -53,7 +53,6 @@ export default {
     },
     created() {
         EventBus.$on('selectFilter', (e) => {
-            console.log('here is e!', e)
             this.selectedFilterValues = e;
         })
     },
@@ -69,7 +68,6 @@ export default {
                 if(this.selectedFilterValues.severity === 'All') return true;
                 return issue.severity === this.selectedFilterValues.severity;
             });
-            console.log('here is the filteredList:', filteredList)
             return filteredList
         }
     }

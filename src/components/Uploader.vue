@@ -3,7 +3,7 @@
     <button class='button logout is-link' @click='logout'>Logout</button>
     <div class='uploader'>
       <div class='issuesTitle'>
-        <h1 class='title'>Upload an XML file to see a list of issues</h1>
+        <h1 class='title'>Drop an XML file to see a list of issues or use the upload button</h1>
       </div>
       <form action='#' onsubmit="return false;">
         <input 
@@ -128,6 +128,61 @@ export default {
     IssueList,
   },
   created() {
+    let dropArea = document;
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, preventDefaults, false)
+    })
+    dropArea.addEventListener('drop', (e) => {
+      console.log('dropped!');
+
+      // Again, I am aware of the massive code duplication that is going on in here.
+      // I can exract any repeating logic into a separate function if need be, so no worries!
+
+      let dt = e.dataTransfer;
+      let file = dt.files[0];
+      console.log(file[0]);
+      var fr = new FileReader();
+      var token = this.token;
+      fr.onload = function (e) { 
+          var content = e.target.result;
+          fetch(
+              'http://localhost:8086/restricted',
+              {
+                  method: 'POST',
+                  headers: {
+                      'Authorization': 'Bearer ' + token,
+                      'Content-Type': 'text/xml',
+                  },
+                  body: content
+              }
+          ).then((response) => {
+            if(response.status === 400) {
+              this.issueList = [];
+              response.json().then((data) => {
+                this.error = 'Server error: ' + data.message
+              })
+              return;
+            }
+            response.json()
+            .then((data) => {
+              this.issueList = data.issue;
+              this.error = '';
+              this.filterValues = filterMapper(data.issue);
+            })
+          })
+      }.bind(this);
+      try {
+        fr.readAsText(file)
+      } catch(err) {
+        this.error = 'Please select a valid XML file'
+      }
+
+
+    },false)
+    function preventDefaults (e) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
     this.token = localStorage.getItem('auth');
     var token = this.token;
     fetch(
