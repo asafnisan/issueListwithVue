@@ -25,6 +25,7 @@
             </tr>
         </tbody>
     </table>
+    <div v-else-if='filteredIssueList.length === 0' class='empty'>Zero issues to be displayed with current filter parameters</div>
 </div>
 </template>
 
@@ -81,5 +82,9 @@ export default {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 250px;
+}
+.empty {
+    margin-top: 75px;
+    color: salmon;
 }
 </style>
