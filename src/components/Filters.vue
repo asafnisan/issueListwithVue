@@ -5,7 +5,7 @@
       <label class='label'>Confidence</label>
       <div class='select'>
         <select v-model='confidence' @change='handleChange'>
-          <option v-for='value in filterValues.confidence'>{{value}}</option>
+          <option v-for='value in filterValuesWithAll.confidence'>{{value}}</option>
         </select>
       </div>
     </div>
@@ -13,7 +13,7 @@
       <label class='label'>Name</label>
       <div class='select'>
         <select v-model='name' @change='handleChange'>
-          <option v-for='value in filterValues.name'>{{value}}</option>
+          <option v-for='value in filterValuesWithAll.name'>{{value}}</option>
         </select>
       </div>
     </div>
@@ -21,7 +21,7 @@
       <label class='label'>Severity</label>
       <div class='select'>
         <select v-model='severity' @change='handleChange'>
-          <option v-for='value in filterValues.severity'>{{value}}</option>
+          <option v-for='value in filterValuesWithAll.severity'>{{value}}</option>
         </select>
       </div>
     </div>
@@ -36,9 +36,9 @@ export default {
   props: [ 'filterValues' ],
   data() {
     return {
-      confidence: this.$props.filterValues.confidence[0],
-      name: this.$props.filterValues.name[0],
-      severity: this.$props.filterValues.severity[0],
+      confidence: 'All',
+      name: 'All',
+      severity: 'All',
     }
   },
   methods: {
@@ -51,6 +51,23 @@ export default {
       EventBus.$emit('selectFilter', selectedFilterValues);
     }
   },
+  computed: {
+    filterValuesWithAll() {
+      return {
+        confidence: this.$props.filterValues.confidence.concat('All').reverse(),
+        name: this.$props.filterValues.name.concat('All').reverse(),
+        severity: this.$props.filterValues.severity.concat('All').reverse(),
+      }
+    }
+  },
+  created() {
+    const selectedFilterValues = {
+      confidence: this.confidence,
+      name: this.name,
+      severity: this.severity,
+    }
+    EventBus.$emit('selectFilter', selectedFilterValues);
+  }
 }
 </script>
 
