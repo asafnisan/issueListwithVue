@@ -87,4 +87,7 @@ export default {
     margin-top: 75px;
     color: salmon;
 }
+table {
+    width: 90%;
+}
 </style>
