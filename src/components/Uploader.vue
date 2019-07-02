@@ -136,7 +136,7 @@ export default {
       console.log('dropped!');
 
       // Again, I am aware of the massive code duplication that is going on in here.
-      // I can exract any repeating logic into a separate function if need be, so no worries!
+      // I can extract any repeating logic into a separate function if need be, so no worries!
 
       let dt = e.dataTransfer;
       let file = dt.files[0];
